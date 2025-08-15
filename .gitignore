@@ -48,3 +48,7 @@ pids
 # Testing
 jest-cache/
 jest-test-results.json
+
+
+# database files
+data/
