@@ -6,7 +6,7 @@ var mysql = require('mysql2/promise')
 const router = app.Router();
 // Handling GET Request
 const external = require('../constant.js');
-const productservice = require("../services/productService.js");
+const productservice = require("../services/carDetailService.js");
 
 router.get("/getAll",async (req,res)=>{
     try {
@@ -17,15 +17,6 @@ router.get("/getAll",async (req,res)=>{
     }
   });
 
-  router.get("/getProductById/:id",async (req,res)=>{
-    try {
-      const id = req.params.id;
-      const products = await productservice.getById(id);
-      res.json(products);
-    } catch (err) {
-      res.status(500).json({ error: 'Failed to fetch products'+err });
-    }
-  });
 
   router.post("/create", async (req,res)=>{
     try {
@@ -71,7 +62,9 @@ router.get("/getAll",async (req,res)=>{
 
   router.get("/getRunning", async (req,res)=>{
     try {
+        console.log("get running")
         const running = await productservice.getRunning();
+        console.log(running)
         res.json(running);
       } catch (err) {
         res.status(500).json({ error: 'Failed to fetch products'+err });

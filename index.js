@@ -3,7 +3,7 @@ const app = express();
 const cors = require('cors');
 const adminRouter = require("./routes/adminController");
 const catRouter = require("./routes/catagoryController");
-const productRouter = require("./routes/productController");
+const carDetailRouter = require("./routes/carDetailController");
 const customerRouter = require("./routes/customerController");
 const orderRouter = require("./routes/orderController");
 const uploadFileRouter = require("./routes/uploadContronller")
@@ -14,7 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 //app.use('/restaurant', userRouter);
 app.use("/admin",adminRouter);
 app.use("/cat",catRouter);
-app.use("/product",productRouter)
+app.use("/carDetail",carDetailRouter)
 app.use("/customer",customerRouter)
 app.use("/order",orderRouter);
 app.use("/upload",uploadFileRouter);
