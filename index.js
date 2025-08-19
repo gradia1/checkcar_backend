@@ -18,7 +18,7 @@ app.use("/carDetail",carDetailRouter)
 app.use("/customer",customerRouter)
 app.use("/order",orderRouter);
 app.use("/upload",uploadFileRouter);
-
+/*
 const swaggerUi = require('swagger-ui-express');
 const swaggerJSDoc = require('swagger-jsdoc');
 
@@ -52,7 +52,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.get('/hello', (req, res) => {
   res.send('Hello Swagger!');
 });
-
+*/
 app.get("/", (req, res) => {
     res.send("port is " + process.env.DB_PORT);
 })
