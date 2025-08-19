@@ -1,28 +1,53 @@
 const db = require('../db.js');
-const productModel = require("../model/carDetailModel.js");
-const {getNewId} = require("../constant.js") 
+const carDetailModel = require("../model/carDetailModel.js");
+const { getNewId } = require("../constant.js")
 
 
+const updatestatus = async (req) => {
+  //console.log("updatestatus service")
+  try {
+    if (!req.body.status || !req.params.id) {
+      throw new Error("Invalid request data");
+    }
+
+    await carDetailModel.updatestatus(req);
+
+  }
+  catch (err) {
+    console.error("Error in updatestatus service:", err);
+    throw new Error("Failed to update car status");
+  }
+}
 
 const create = async (req) => {
   const conn = await db.getConnection();
+  let have_car_regis = 0;
   let retRes;
   try {
-console.log("เข้า service")
+    //console.log("เข้า service")
     conn.beginTransaction();
+
+    have_car_regis = await carDetailModel.getRedandenCarRegis(conn, req);
+
+    if (have_car_regis.have_car_regis > 0) {
+      throw new Error("you have car regis already");
+    }
+
     value = await carDetailModel.getRunning(conn);
-    //let genId = getProductId(value.runningid);
-    let genId = getNewId("PD",value.runningid,7);
-    // req.body.productid = genId;
-    // retRes = await productModel.createProduct(conn, req);
-    //create new cardetail
+    let genId = getNewId("CHC", value.runningid, 7);
+
+    retRes = await carDetailModel.createCarDetail(conn, req, genId);
+    let retRes1 = await carDetailModel.createLogin(conn, req);
+
+    console.log("retRes1: " + JSON.stringify(retRes1))
 
     await carDetailModel.addRunning(conn);
     conn.commit();
-    retRes = { status: 200, running_id: genId , message: 'add new product' }
+    retRes = { status: 200, running_id: genId, message: 'add new car detail' }
   }
   catch (err) {
-    retRes = { status: 500, error: "ไม่สามารถเพิ่มสินค้า" }
+    errmsg = have_car_regis.have_car_regis == 1 ? "คุณมีทะเบียนรถนี้แล้ว" : "ไม่สามารถเพิ่มข้อมูลรถได้ "
+    retRes = { status: 500, err: errmsg };
     conn.rollback();
   }
   finally {
@@ -39,11 +64,11 @@ const getRunning = async () => {
   let retRes;
   try {
     conn.beginTransaction();
-    value = await productModel.getRunning(conn);
-    let genId =  getNewId("CHC",value.runningid,7)
+    value = await carDetailModel.getRunning(conn);
+    let genId = getNewId("CHC", value.runningid, 7)
 
     console.log("get running id: " + genId)
-    //await productModel.addRunning(conn);
+    //await carDetailModel.addRunning(conn);
     retRes = { status: 200, genId: genId }
 
     conn.commit();
@@ -59,4 +84,4 @@ const getRunning = async () => {
 
 }
 
-module.exports = { create, getRunning };
+module.exports = { create, getRunning,updatestatus };

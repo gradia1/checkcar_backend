@@ -6,86 +6,39 @@ var mysql = require('mysql2/promise')
 const router = app.Router();
 // Handling GET Request
 const external = require('../constant.js');
-const productservice = require("../services/carDetailService.js");
+const carcetailservice = require("../services/carDetailService.js");
 
-router.get("/getAll",async (req,res)=>{
-    try {
-      const products = await productservice.getAll();
-      res.json(products);
-    } catch (err) {
-      res.status(500).json({ error: 'Failed to fetch products'+err });
-    }
-  });
+router.put("/updatestatus/:id", async (req, res) => {
+  try {
+    console.log("updatestatus route: " + JSON.stringify(req.body))
+    await carcetailservice.updatestatus(req);
+    res.json({ status: 200, message: "แก้ไขเรียบร้อยแล้ว" });
+  } catch (err) {
+    console.error("Error in updatestatus route:", err);
+    res.status(500).json({ error: 'ไม่สามารถแก้ไขสถานะรถได้' });
+  }
+});
 
 
-  router.post("/create", async (req,res)=>{
-    try {
-      console.log("am here")
-        const products = await productservice.create(req);
-        res.json(products);
-      } catch (err) {
-        res.json({status:500,error:"can't add products"});
-      }
+router.post("/create", async (req, res) => {
+  try {
+    const cardetail = await carcetailservice.create(req);
+    res.json(cardetail);
+  } catch (err) {
+    res.json({ status: 500, error: "can't add cardetail" });
+  }
 
-  });
+});
 
-  router.put("/updateProduct/:productid", async (req,res)=>{
-    var productid = req.params.productid;
-    try {
-        const prducts = await productservice.updateProduct(productid,req);
-        res.json(prducts);
-      } catch (err) {
-        res.json({status:500,error:err.message});
-      }
-  });
+router.get("/getRunning", async (req, res) => {
+  try {
+    const running = await carcetailservice.getRunning();
+    console.log(running)
+    res.json(running);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch running' + err });
+  }
 
-  router.put("/updateStatus/:productid", async (req,res)=>{
-    var productid = req.params.productid;
-    try {
-        const prducts = await productservice.updateStatus(productid,req);
-        res.json(prducts);
-      } catch (err) {
-        res.json({status:500,error:err.message});
-      }
-  });
-
-  router.delete("/deleteProduct/:productid", async (req,res)=>{
-    var productid = req.params.productid;
-    try {
-        const products = await productservice.deleteProduct(productid);
-        res.json(products);
-      } catch (err) {
-        res.json({status:500,error:err.message});
-      }
-
-  });
-
-  router.get("/getRunning", async (req,res)=>{
-    try {
-        console.log("get running")
-        const running = await productservice.getRunning();
-        console.log(running)
-        res.json(running);
-      } catch (err) {
-        res.status(500).json({ error: 'Failed to fetch products'+err });
-      }
-
-  });
-
-//connect to database
-// var con = mysql.createConnection({
-//     host: external.GET_MYSQL_DETAIL.HOST,
-//     user: external.GET_MYSQL_DETAIL.LOGIN,
-//     port: 3306,
-//     password: external.GET_MYSQL_DETAIL.PASSWORD,
-//     database: external.GET_MYSQL_DETAIL.DATABASE
-// })
-
-// var con = mysql.createPool({
-//     host: external.GET_MYSQL_DETAIL.HOST,
-//     user: external.GET_MYSQL_DETAIL.LOGIN,
-//     password: external.GET_MYSQL_DETAIL.PASSWORD,
-//     database: external.GET_MYSQL_DETAIL.DATABASE,
-//     port: 3306
+});
 
 module.exports = router;
