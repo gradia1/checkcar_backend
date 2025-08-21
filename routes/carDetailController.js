@@ -14,8 +14,9 @@ router.put("/updatestatus/:id", async (req, res) => {
     await carcetailservice.updatestatus(req);
     res.json({ status: 200, message: "แก้ไขเรียบร้อยแล้ว" });
   } catch (err) {
-    console.error("Error in updatestatus route:", err);
-    res.status(500).json({ error: 'ไม่สามารถแก้ไขสถานะรถได้' });
+    console.log('err message is ' + err.message)
+    //console.error("Error in updatestatus route:", err);
+    res.status(500).json({ error: err.message });
   }
 });
 

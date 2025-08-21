@@ -14,8 +14,8 @@ const updatestatus = async (req) => {
 
   }
   catch (err) {
-    console.error("Error in updatestatus service:", err);
-    throw new Error("Failed to update car status");
+    //console.error("Error in updatestatus service:", err);
+    throw err;
   }
 }
 

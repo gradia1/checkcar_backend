@@ -7,14 +7,18 @@ sql = "UPDATE car_detail SET status = ?,updated=now() WHERE id = ?";
   try {
     const [result] = await db.execute(sql, [req.body.status, req.params.id]);
     let ret = result.affectedRows > 0;
+    //console.log(result.affectedRows);
     if (ret)
       return { status: 200, message: "แก้ไขเรียบร้อยแล้ว" }
-    else
-      return { status: 300, message: "ไม่มีการแก้ข้อมูล" }
+    else{
+      console.log("ไม่พบข้อมูลเพื่อ update")
+      throw new Error("ไม่พบข้อมูลเพื่อ update")
+      //return { status: 300, message: "ไม่มีการแก้ข้อมูล" }
+    }
   }
   catch (err) {
-    console.error(err);
-    throw new Error('ไม่สามารถแก้ไขสถานะรถได้');
+    //console.error(err);
+    throw err;
   }
 
 }

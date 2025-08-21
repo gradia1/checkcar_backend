@@ -8,7 +8,7 @@ const login = async (req) => {
 
   try {
     let row = await loginModel.login(req);
-    retRes = {status:200,have:row.have,folder_name:row.folder_name}
+    retRes = {status:200,have:row.have,folder_name:row.folder_name,status:row.stauts}
     return retRes;
   }
   catch(err) {

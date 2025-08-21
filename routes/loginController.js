@@ -8,7 +8,6 @@ const router = app.Router();
 const external = require('../constant.js');
 const loginService = require("../services/loginService.js");
 
-
   router.post("/login", async (req,res)=>{
     console.log("login route: " + JSON.stringify(req.body))
     try {
