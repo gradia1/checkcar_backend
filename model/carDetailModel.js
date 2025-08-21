@@ -61,9 +61,9 @@ const addRunning = async (conn) => {
 const createCarDetail = async (conn,req,genId) => {
 
 try {
-    const sql = "INSERT INTO car_detail (id, ref_id, car_regis, tel_regis, created,updated,status,start_date,end_date,from_type)"
-    + " VALUES (?, ?, ?, ?, now(),now(),?, ?, ?, ?)";
-    const params = [genId, req.body.ref_id, req.body.car_regis, req.body.tel_regis,0,req.body.start_date,req.body.end_date,req.body.from_type];
+    const sql = "INSERT INTO car_detail (id, ref_id, car_regis, tel_regis, created,updated,status,start_date,end_date,from_type,name,surname,brand,year,car_model,body_number)"
+    + " VALUES (?, ?, ?, ?, now(),now(),?, ?, ?, ?,?,?,?,?,?,?)";
+    const params = [genId, req.body.ref_id, req.body.car_regis, req.body.tel_regis,0,req.body.start_date,req.body.end_date,req.body.from_type,req.body.name,req.body.surname,req.body.brand,req.body.year,req.body.car_model,req.body.body_number];
     const [result] = await conn.execute(sql, params);
     return { status: 200, message: 'Car detail created successfully'};
   }

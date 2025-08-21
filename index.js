@@ -1,22 +1,17 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
-const adminRouter = require("./routes/adminController");
-const catRouter = require("./routes/catagoryController");
+
 const carDetailRouter = require("./routes/carDetailController");
 const loginRouter = require("./routes/loginController");
-const orderRouter = require("./routes/orderController");
 const uploadFileRouter = require("./routes/uploadContronller")
 
 app.use(cors())
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 //app.use('/restaurant', userRouter);
-app.use("/admin",adminRouter);
-app.use("/cat",catRouter);
 app.use("/carDetail",carDetailRouter)
 app.use("/login",loginRouter)
-app.use("/order",orderRouter);
 app.use("/upload",uploadFileRouter);
 /*
 const swaggerUi = require('swagger-ui-express');
