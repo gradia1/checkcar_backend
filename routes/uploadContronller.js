@@ -114,6 +114,21 @@ router.get('/check-image/:imageName', (req, res) => {
     }
 });
 
+// ลบทั้งโฟลเดอร์ 'uploads'
+router.delete('/delete-folder', (req, res) => {
+  const folder =  "/" + req.body.folder;
+  const origin = path.join(__dirname, 'uploads', folder); 
+  let uploadFolder = origin;
+  //console.log("uploadFolder = " + origin)
+  if (fs.existsSync(uploadFolder)) {
+    fs.rmSync(uploadFolder, { recursive: true, force: true }); // ลบทั้งโฟลเดอร์และไฟล์ภายใน
+    res.send({status:200, message: 'ลบโฟลเดอร์เรียบร้อยแล้ว' });
+  } else {
+    res.status(404).send({ message: 'ไม่พบโฟลเดอร์' });
+  }
+});
+
+
 router.delete('/delete-image', (req, res) => {
     const imageName = req.query.fileName;  // Assume the image name is sent in the request body
 

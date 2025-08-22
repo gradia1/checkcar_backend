@@ -13,7 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/carDetail",carDetailRouter)
 app.use("/login",loginRouter)
 app.use("/upload",uploadFileRouter);
-/*
+
 const swaggerUi = require('swagger-ui-express');
 const swaggerJSDoc = require('swagger-jsdoc');
 
@@ -29,6 +29,8 @@ const swaggerDefinition = {
     {
       url: 'http://localhost:3005',
       description: 'Local server',
+      //url: 'http://http://4.193.206.229:3005',
+      //description: 'UAT server',
     },
   ],
 };
@@ -43,17 +45,17 @@ const swaggerSpec = swaggerJSDoc(options);
 // Middleware Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
+
 // Route ทดสอบ
 app.get('/hello', (req, res) => {
   res.send('Hello Swagger!');
 });
-*/
+
 app.get("/", (req, res) => {
     res.send("port is " + process.env.DB_PORT);
 })
 
 app.listen(3005, () => {
   console.log('Server is running on http://localhost:3005');
-  //console.log('Server running on http://localhost:3000');
   console.log('Swagger docs at http://localhost:3005/api-docs');
 });
