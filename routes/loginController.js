@@ -37,21 +37,26 @@ const loginService = require("../services/loginService.js");
  *     responses:
  *       200:
  *         description: Lgin successfully but have must 1
+ *       404:
+ *         description: not found user
  *       500:
  *         description: System Error
  * 
  */
 
-  router.post("/login", async (req,res)=>{
-    console.log("login route: " + JSON.stringify(req.body))
-    try {
-        const login = await loginService.login(req);
-        res.json(login);
-      } catch (err) {
-        res.json({status:500,error:"can't login"});
-      }
+router.post("/login", async (req, res) => {
+  console.log("login route: " + JSON.stringify(req.body))
+  try {
+    const login = await loginService.login(req);
+    if (login.have == 0)
+      res.status(404).json({ error: "ไม่พบข้อมูลทะเบียนหรือ otp หมดเวลา" })
+    else
+      res.json(login);
+  } catch (err) {
+    res.json({ status: 500, error: "can't login" });
+  }
 
-  });
+});
 
 
 module.exports = router;

@@ -2,16 +2,24 @@
 const db = require('../db');
 
 const updatestatus = async (req) => {
-sql = "UPDATE car_detail SET status = ?,updated=now() WHERE id = ?";
+  sql = "UPDATE car_detail SET status = ?,updated=now() WHERE id = ?";
 
   try {
+    const { status } = req.body;
+
+    // ตรวจสอบว่า status เป็น 1, 2, 3 หรือ 4 เท่านั้น
+    const allowedStatuses = [0, 1, 2, 3, 4];
+
+    if (!allowedStatuses.includes(Number(status))) {
+      throw new Error("สถานะที่ได้รับไม่มี")
+    }
+
     const [result] = await db.execute(sql, [req.body.status, req.params.id]);
     let ret = result.affectedRows > 0;
     //console.log(result.affectedRows);
     if (ret)
-      return { status: 200, message: "แก้ไขเรียบร้อยแล้ว" }
-    else{
-      console.log("ไม่พบข้อมูลเพื่อ update")
+      return { status: 200, message: "update เรียบร้อยแล้ว" }
+    else {
       throw new Error("ไม่พบข้อมูลเพื่อ update")
       //return { status: 300, message: "ไม่มีการแก้ข้อมูล" }
     }
@@ -23,14 +31,14 @@ sql = "UPDATE car_detail SET status = ?,updated=now() WHERE id = ?";
 
 }
 
-const getRedandenCarRegis = async (conn,req) => {
+const getRedandenCarRegis = async (conn, req) => {
   try {
 
     sql = "SELECT COUNT(*) value FROM `car_detail` cd WHERE cd.car_regis = ? and cd.end_date > now()"
     const params = [req.body.car_regis];
     const [result] = await conn.execute(sql, params);
 
-    return {have_car_regis: result[0].value} 
+    return { have_car_regis: result[0].value }
   }
   catch (err) {
     console.error("Error in getRedandenCarRegis:", err);
@@ -62,14 +70,14 @@ const addRunning = async (conn) => {
   }
 };
 
-const createCarDetail = async (conn,req,genId) => {
+const createCarDetail = async (conn, req, genId) => {
 
-try {
+  try {
     const sql = "INSERT INTO car_detail (id, ref_id, car_regis, tel_regis, created,updated,status,start_date,end_date,from_type,name,surname,brand,year,car_model,body_number)"
-    + " VALUES (?, ?, ?, ?, now(),now(),?, ?, ?, ?,?,?,?,?,?,?)";
-    const params = [genId, req.body.ref_id, req.body.car_regis, req.body.tel_regis,0,req.body.start_date,req.body.end_date,req.body.from_type,req.body.name,req.body.surname,req.body.brand,req.body.year,req.body.car_model,req.body.body_number];
+      + " VALUES (?, ?, ?, ?, now(),now(),?, ?, ?, ?,?,?,?,?,?,?)";
+    const params = [genId, req.body.ref_id, req.body.car_regis, req.body.tel_regis, 0, req.body.start_date, req.body.end_date, req.body.from_type, req.body.name, req.body.surname, req.body.brand, req.body.year, req.body.car_model, req.body.body_number];
     const [result] = await conn.execute(sql, params);
-    return { status: 200, message: 'Car detail created successfully'};
+    return { status: 200, message: 'Car detail created successfully' };
   }
   catch (err) {
     console.error("Error creating car detail:", err);
@@ -80,11 +88,11 @@ try {
 
 const createLogin = async (conn, req) => {
   try {
-    const sql = "INSERT INTO login(car_regis,otp_pin,expire)" 
-    + " VALUES (?,'1234','2025-12-30')";
+    const sql = "INSERT INTO login(car_regis,otp_pin,expire)"
+      + " VALUES (?,'1234','2025-12-30')";
     const params = [req.body.car_regis];
     const [result] = await conn.execute(sql, params);
-    return { status: 200, message: 'Login created successfully'};
+    return { status: 200, message: 'Login created successfully' };
   }
   catch (err) {
     console.error("Error creating car detail:", err);
@@ -93,4 +101,4 @@ const createLogin = async (conn, req) => {
 }
 
 
-module.exports = {getRunning, addRunning, createCarDetail, createLogin,getRedandenCarRegis,updatestatus};
+module.exports = { getRunning, addRunning, createCarDetail, createLogin, getRedandenCarRegis, updatestatus };
