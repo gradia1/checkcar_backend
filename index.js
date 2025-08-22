@@ -27,10 +27,10 @@ const swaggerDefinition = {
   },
   servers: [
     {
-      url: 'http://localhost:3005',
-      description: 'Local server',
-      //url: 'http://http://4.193.206.229:3005',
-      //description: 'UAT server',
+      // url: 'http://localhost:3005',
+      // description: 'Local server',
+      url: 'http://http://4.193.206.229:3005',
+      description: 'UAT server',
     },
   ],
 };
