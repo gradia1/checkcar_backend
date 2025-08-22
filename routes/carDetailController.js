@@ -55,13 +55,52 @@ const carcetailservice = require("../services/carDetailService.js");
  *               body_number:
  *                 type: string
  *             required:
+ *               - ref_id
+ *               - car_regis
+ *               - tel_regis
+ *               - start_date
+ *               - end_date
+ *               - from_type
+ *               - name
+ *               - surname
  *               - brand
- *               - model
+ *               - year  
+ *               - car_model
+ *               - body_number              
  *     responses:
  *       200:
- *         description: Car added successfully
+ *         description: Detail Car created successfully
+ *       500:
+ *         description: System Error
+ * 
+ * /carDetail/updatestatus/{id}:
+ *   put:
+ *     summary: Update car status
+ *     description: Update the status of a car by ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID of the car to update
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               status:
+ *                 type: string
+ *                 example: 1
+ *     responses:
+ *       200:
+ *         description: Car status updated successfully
  *       400:
- *         description: Bad Request
+ *         description: Invalid request
+ *       404:
+ *         description: Car not found
  */
 
 router.put("/updatestatus/:id", async (req, res) => {
