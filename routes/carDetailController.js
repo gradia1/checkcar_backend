@@ -13,14 +13,18 @@ const carcetailservice = require("../services/carDetailService.js");
  * /carDetail/getRunning:
  *   get:
  *     summary: Get car detail
- *     description: Returns a car detail
+ *     tags:
+ *       - CarDetail
+ *     description: Get current running id
  *     responses:
  *       200:
  *         description: A car detail
   * /carDetail/create:
  *   post:
- *     summary: Add new car detail
- *     description: Create a new car entry
+ *     summary: Create new car detail
+ *     tags:
+ *       - CarDetail
+ *     description: Create a new car detail
  *     requestBody:
  *       required: true
  *       content:
@@ -75,8 +79,10 @@ const carcetailservice = require("../services/carDetailService.js");
  * 
  * /carDetail/updatestatus/{id}:
  *   put:
- *     summary: Update car status
- *     description: Update the status of a car by ID
+ *     summary: For updating car status
+ *     tags:
+ *       - CarDetail
+ *     description: Update the status by SK Plus
  *     parameters:
  *       - in: path
  *         name: id
@@ -97,10 +103,8 @@ const carcetailservice = require("../services/carDetailService.js");
  *     responses:
  *       200:
  *         description: Car status updated successfully
- *       400:
- *         description: Invalid request
- *       404:
- *         description: Car not found
+ *       500:
+ *         description: System Error
  */
 
 router.put("/updatestatus/:id", async (req, res) => {

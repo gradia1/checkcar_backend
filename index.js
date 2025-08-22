@@ -21,17 +21,19 @@ const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerDefinition = {
   openapi: '3.0.0',
   info: {
-    title: 'My API',
+    title: 'Check Car API',
     version: '1.0.0',
     description: 'API documentation using Swagger in Node.js',
   },
   servers: [
+    // {
+    //   url: 'http://localhost:3005',
+    //   description: 'Local server',
+    // },
     {
-      // url: 'http://localhost:3005',
-      // description: 'Local server',
       url: 'http://4.193.206.229:3005',
       description: 'UAT server',
-    },
+    }
   ],
 };
 
