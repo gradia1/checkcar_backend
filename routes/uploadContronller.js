@@ -5,6 +5,7 @@ const app = require('express');
 const fs = require('fs');
 //const express = require("express")
 const router = app.Router();
+const archiver = require('archiver');
 
 //require('dotenv').config();
 
@@ -116,16 +117,16 @@ router.get('/check-image/:imageName', (req, res) => {
 
 // ลบทั้งโฟลเดอร์ 'uploads'
 router.delete('/delete-folder', (req, res) => {
-  const folder =  "/" + req.body.folder;
-  const origin = path.join(__dirname, 'uploads', folder); 
-  let uploadFolder = origin;
-  //console.log("uploadFolder = " + origin)
-  if (fs.existsSync(uploadFolder)) {
-    fs.rmSync(uploadFolder, { recursive: true, force: true }); // ลบทั้งโฟลเดอร์และไฟล์ภายใน
-    res.send({status:200, message: 'ลบโฟลเดอร์เรียบร้อยแล้ว' });
-  } else {
-    res.status(404).send({ message: 'ไม่พบโฟลเดอร์' });
-  }
+    const folder = "/" + req.body.folder;
+    const origin = path.join(__dirname, 'uploads', folder);
+    let uploadFolder = origin;
+    //console.log("uploadFolder = " + origin)
+    if (fs.existsSync(uploadFolder)) {
+        fs.rmSync(uploadFolder, { recursive: true, force: true }); // ลบทั้งโฟลเดอร์และไฟล์ภายใน
+        res.send({ status: 200, error: 'ลบโฟลเดอร์เรียบร้อยแล้ว' });
+    } else {
+        res.status(404).json({ error: 'ไม่พบโฟลเดอร์' });
+    }
 });
 
 
@@ -144,6 +145,44 @@ router.delete('/delete-image', (req, res) => {
         }
         res.status(200).json({ message: 'Image deleted successfully' });
     });
+});
+
+router.get('/download-folder', (req, res) => {
+    const folder_download = "/" + req.body.folder;
+
+    if (req.body.folder == undefined){
+        res.status(404).json({ error: 'ไม่พบ folder' })
+        return;
+    }
+
+    const folderPath = path.join(__dirname, 'uploads', "/" + folder_download); // Folder you want to zip
+    //console.log(folderPath);
+    const archiveName = folder_download + '.zip';
+
+    if (!fs.existsSync(folderPath)) {
+        res.status(404).json({ error: 'Folder does not exist' });
+        return;
+    }
+
+    res.setHeader('Content-Disposition', `attachment; filename=${archiveName}`);
+    res.setHeader('Content-Type', 'application/zip');
+
+    const archive = archiver('zip', {
+        zlib: { level: 9 },
+    });
+
+    archive.on('error', (err) => {
+        res.status(500).json({ error: err.message });
+    });
+
+    // Pipe the archive to the response
+    archive.pipe(res);
+
+    // Append the entire folder
+    archive.directory(folderPath, false);
+
+    // Finalize the archive (send it)
+    archive.finalize();
 });
 
 module.exports = router;

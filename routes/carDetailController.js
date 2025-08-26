@@ -19,7 +19,28 @@ const carcetailservice = require("../services/carDetailService.js");
  *     responses:
  *       200:
  *         description: A car detail
-  * /carDetail/create:
+ * /carDetail/getById:
+ *   get:
+ *     summary: Get car detail by id
+ *     tags:
+ *       - CarDetail
+ *     description: Get car detail by id
+*     parameters:
+*       - in: query
+*         name: id
+*         required: true
+*         schema:
+*           type: string
+*           example: "CHC0000001"
+*         description: The ID of the car to retrieve
+ *     responses:
+ *       200:
+ *         description: A car detail
+ *       404:
+ *         description: don't find data
+ *       500:
+ *         description: system error * 
+ * /carDetail/create:
  *   post:
  *     summary: Create new car detail
  *     tags:
@@ -107,6 +128,21 @@ const carcetailservice = require("../services/carDetailService.js");
  *       500:
  *         description: System Error
  */
+router.get("/getById", async (req, res) => {
+  console.log(req.query.id)
+  try {
+    let result = await carcetailservice.getById(req)
+    res.status(200).json({ data: result });
+  }
+  catch (err) {
+    if (err.message == "ไม่พบข้อมูล")
+      res.status(404).json({ error: "ไม่พบข้อมูล" })
+    else
+      res.status(500).json({ error: err.message })
+  }
+
+})
+
 
 router.put("/updatestatus/:id", async (req, res) => {
   try {

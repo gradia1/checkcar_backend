@@ -3,6 +3,22 @@ const carDetailModel = require("../model/carDetailModel.js");
 const { getNewId } = require("../constant.js")
 
 
+const getById = async (req) => {
+    console.log("in service")
+  try {
+    if (req.params.id)
+      throw new Error("no parameter sent")
+    var result = await carDetailModel.getById(req)
+    return result;
+
+  }
+  catch (err) {
+    console.log("แสดง " +err.message)
+    throw err;
+  }
+
+}
+
 const updatestatus = async (req) => {
   //console.log("updatestatus service")
   try {
@@ -84,4 +100,4 @@ const getRunning = async () => {
 
 }
 
-module.exports = { create, getRunning,updatestatus };
+module.exports = { getById, create, getRunning, updatestatus };

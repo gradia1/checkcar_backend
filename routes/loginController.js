@@ -45,6 +45,8 @@ const loginService = require("../services/loginService.js");
  */
 
 router.post("/login", async (req, res) => {
+
+  console.log("login in " + req)
   console.log("login route: " + JSON.stringify(req.body))
   try {
     const login = await loginService.login(req);

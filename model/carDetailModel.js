@@ -1,8 +1,31 @@
 // userModel.js
 const db = require('../db');
 
+
+const getById = async (req) => {
+
+  try {
+    let sql = "SELECT * FROM car_detail Where id = ?"
+    console.log('paramerter = ' + req.query.id )
+    let [result] = await db.execute(sql, [req.query.id ])
+
+    if (result.length == 0 ){
+      console.log("โยน error")
+        throw new Error("ไม่พบข้อมูล")
+        return;
+    }
+    //console.log(result);
+    return result;
+  }
+  catch(err){
+    //console.log(err.message)
+    throw err
+  }
+
+}
+
 const updatestatus = async (req) => {
-  sql = "UPDATE car_detail SET status = ?,updated=now() WHERE id = ?";
+  sql = "UPDATE car_detail SET status = ?,updated=now() WHERE car_regis = ?";
 
   try {
     const { status } = req.body;
@@ -101,4 +124,4 @@ const createLogin = async (conn, req) => {
 }
 
 
-module.exports = { getRunning, addRunning, createCarDetail, createLogin, getRedandenCarRegis, updatestatus };
+module.exports = {getById, getRunning, addRunning, createCarDetail, createLogin, getRedandenCarRegis, updatestatus };
